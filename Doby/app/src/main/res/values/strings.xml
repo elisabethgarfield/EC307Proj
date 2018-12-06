@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Home</string>
+    <string name="New_Class_Butt">New Class</string>
+    <string name="New_Due_Date_Butt">New Due Date</string>
+    <string name="Class_Name_Edit">Class Name</string>
+    <string name="Start_Date_Edit">Start Date</string>
+    <string name="End_Date_Edit">End Date</string>
+    <string name="Sect_Title">New Section</string>
+    <string name="Time_Edit">Start Time</string>
+    <string name="Duration_Edit">End Time</string>
+    <string name="Add_Info_Butt">ADD</string>
+    <string name="Existing_Sections_Text">Existing Sections</string>
+    <string name="Set_Class_Butt">Set Class</string>
+    <string-array name="day_drop">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+    </string-array>
+    <string-array name="Class_type_drop">
+        <item>Lecture</item>
+        <item>Lab</item>
+        <item>Discussion</item>
+    </string-array>
+    <string-array name="AM_OR_PM">
+        <item>AM</item>
+        <item>PM</item>
+    </string-array>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="Assign_Name">Name</string>
+    <string name="multiplier">Multiplier</string>
+    <string name="Done_Butt">Done</string>
+    <string name="Done_Assign_Butt">Done</string>
+    <string name="Add_Assign_Butt">Add Assignment</string>
+    <string-array name="Assignment_Types">
+        <item>Assignment</item>
+        <item>Exam</item>
+        <item>Lab Report</item>
+    </string-array>
+</resources>
