@@ -12,6 +12,8 @@ public class Course implements Serializable {
     double multiplier; // absolute conversion rate (GPA/time)
     String startDate;
     String endDate;
+    String saveString = "";
+
     // eventually add grade breakdown??
 
     public Course(String name, Vector<CourseInstance> classTimes, double multiplier) {
@@ -22,12 +24,15 @@ public class Course implements Serializable {
         this.multiplier = multiplier;
     }
 
+    public Course() {}
+
     public Course(String name, double multiplier, String startDate, String endDate) {
         this.name = name;
         this.classTimes = new Vector<CourseInstance>();
         this.multiplier = multiplier;
         this.startDate = startDate;
         this.endDate = endDate;
+        saveString = name + "$" + multiplier + "$" +  startDate + "$" + endDate;
     }
 
 
@@ -106,6 +111,30 @@ public class Course implements Serializable {
         }
         System.out.println("Class multiplier: " + multiplier);
         System.out.println("Number of Instances: " + classTimes.size());
+    }
+
+    void printCourseInfo(int courseNum) {
+        System.out.println("Class name: " + name);
+        System.out.println("Class Instances: ");
+        // System.out.println(classTimes.length);
+        for (int j = 0; j < classTimes.size(); j++) {
+            System.out.println("-------(" + courseNum + "," + j + ")--------");
+            classTimes.get(j).printCI();
+            System.out.println("++++++-(" + courseNum + "," + j + ")-+++++++");
+        }
+        System.out.println("&&&&&&&&&" + courseNum + "&&&&&&&&&&");
+        System.out.println("Class multiplier: " + multiplier);
+        System.out.println("Number of Instances: " + classTimes.size());
+        System.out.println("%%%%%%%%%" + courseNum + "%%%%%%%%%%%");
+    }
+
+    String returnCourseInfo(int courseNum){
+        String info = "";
+        info = info.concat(":CourseConstructor:" + saveString + "\n");
+        for (int j = 0; j < classTimes.size(); j++) {
+            info = info.concat(classTimes.get(j).returnCI() + "\n");
+        }
+        return info;
     }
 
 

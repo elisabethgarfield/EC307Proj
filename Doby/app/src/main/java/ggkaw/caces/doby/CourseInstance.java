@@ -13,6 +13,8 @@ public class CourseInstance implements Serializable {
     Calendar startTime;
     Calendar endTime;
     String type;
+    String saveString;
+    String day;
 
     // use for lectures, labs, discussions (type, day, start time, end time, start date, end date) REPEATERS
     public CourseInstance(String courseName, String day, String date, String startTime, String endTime, String startap, String endap, String type) {
@@ -21,6 +23,19 @@ public class CourseInstance implements Serializable {
         this.startTime = settingTime(date, startTime, startap);
         this.endTime = settingTime(date, endTime, endap);
         this.type = type;
+        this.day = day;
+        saveString = ":Instance:"+courseName+"$"+name+"$"+this.day+"$"+date+"$"+startTime+"$"+endTime+"$"+startap+"$"+endap+"$"+type;
+    }
+
+    //Added name parameter for uniform loading function
+    public CourseInstance(String courseName, String name, String day, String date, String startTime, String endTime, String startap, String endap, String type) {
+        this.courseName = courseName;
+        this.name = name;
+        this.startTime = settingTime(date, startTime, startap);
+        this.endTime = settingTime(date, endTime, endap);
+        this.type = type;
+        this.day = day;
+        saveString = ":Instance:"+courseName+"$"+name+"$"+this.day+"$"+date+"$"+startTime+"$"+endTime+"$"+startap+"$"+endap+"$"+type;
     }
 
     // use for assignments, tests (take date, name, type) SINGLE INSTANCES
@@ -29,7 +44,9 @@ public class CourseInstance implements Serializable {
         this.name = name;
         this.startTime = settingTime(date);
         this.endTime = this.startTime;
+        this.day = dayOfWeekString(this.startTime.get(this.startTime.DAY_OF_WEEK));
         this.type = type;
+        saveString = ":Instance:"+courseName+"$"+name+"$"+day+"$"+date+"$"+"0:00"+"$"+"0:00"+"$"+"AM"+"$"+"AM"+"$"+type;
     }
 
     public static String dayOfWeekString(int i) {
@@ -138,6 +155,26 @@ public class CourseInstance implements Serializable {
         return hour;
     }
 
+    public static String amOrpm(Calendar c) {
+        if (c.get(c.AM_PM) == 0) {
+            return "AM";
+        } else {
+            return "PM";
+        }
+    }
+
+    public String getInfo() {
+        // returns string info about a specific instance
+        // Current types: Lecture, Lab, Discussion, Assignment, Exam, Lab Report
+        // if one of the first three, don't need to print name, otherwise do
+        String s;
+        if(this.type.equals("Lecture") || this.type.equals("Lab") || this.type.equals("Discussion")) {
+            s = this.courseName + " " + this.type + ": " + convertToHH(this.startTime.get(this.startTime.HOUR)) + ":" + this.startTime.get(this.startTime.MINUTE) + amOrpm(this.startTime) + "\n";
+        } else {
+            s = this.courseName + " " + this.type + ": " + this.name+ "\n";
+        }
+        return s;
+    }
 
     void printCI() {
         System.out.println("Course Name: " +this.courseName);
@@ -147,6 +184,10 @@ public class CourseInstance implements Serializable {
         int hours = this.getDuration()/60; // integer division
         int minutes = this.getDuration() - hours*60;
         System.out.println("Duration: " + hours + ":" + minutes);
+    }
+
+    String returnCI() {
+        return saveString;
     }
 
     public static String calDateToString(Calendar c) {

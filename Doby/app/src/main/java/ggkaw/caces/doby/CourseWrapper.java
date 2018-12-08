@@ -1,6 +1,13 @@
 package ggkaw.caces.doby;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
+import java.io.File;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -48,30 +55,151 @@ public class CourseWrapper implements Serializable {
 
     public void printCourses() {
         for(int i = 0; i < this.allCourses.size(); i++) {
-            allCourses.elementAt(i).printCourseInfo();
+            System.out.println("####-" + i + "-####");
+            allCourses.elementAt(i).printCourseInfo(i);
+            System.out.println("****-" + i + "-****");
         }
     }
 
-    public static void main(String[] args) {
-        Course EK307 = new Course("EK307", 2, "9/1/2018", "12/17/2018");
-        Course.addInstances(EK307,"Monday", "Lecture", "10:10", "11:55", "AM", "AM");
-        // add a hw
-        CourseInstance hw1EK307 = new CourseInstance("EK307", "Wednesday", "12/5/2018", "Homework");
-        EK307.addInstance(hw1EK307);
 
-        Course EC327 = new Course("EC327", 4, "9/1/2018", "12/17/2018");
-        Course.addInstances(EC327, "Monday", "Lecture", "2:30", "4:15", "PM", "PM");
-        CourseInstance hw1EC327 = new CourseInstance("EC327", "Monday", "12/10/2018", "Homework");
-        EC327.addInstance(hw1EC327);
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void saveCourses(){
+        String text = "";
+        try(PrintWriter fos = new PrintWriter("save_test.txt");)
+        {
+            int i = 0;
+            for(i = 0; i < this.allCourses.size(); i++) {
+                text = text.concat("####-" + i + "-####\n");
+                text = text.concat(allCourses.elementAt(i).returnCourseInfo(i));
+                text = text.concat("END-OF-CLASS\n");
+            }
+            fos.print(":NumOfCourses:" + i + "\n" + text);
 
-        CourseWrapper cwrap = new CourseWrapper();
-        cwrap.addCourse(EK307);
-        cwrap.addCourse(EC327);
-
-        // Try printing
-        cwrap.printCourses();
-
-
+        }catch(java.io.FileNotFoundException fos){
+            fos.printStackTrace();
+        }
     }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public CourseWrapper loadCourses(){
+
+        String courseName = "";
+        double multiplier;
+        String startDate = "";
+        String endDate = "";
+        String name =  "";
+        String day = "";
+        String date = "";
+        String startTime = "";
+        String endTime = "";
+        String startap = "";
+        String endap = "";
+        String type = "";
+        String current = "";
+
+        int numOfCourses;
+        CourseWrapper courseWrapper = new CourseWrapper();
+        Course temp = new Course();
+        File file = new File("save_test.txt");
+        try(Scanner sc = new Scanner(file)) {
+            current = sc.nextLine();
+            numOfCourses = Integer.parseInt(current.substring(14));
+
+            for(int i = 0; i < numOfCourses; i++) {
+                while (sc.hasNextLine()) {
+                    current = sc.nextLine();
+                    if(current.contains("####-")){
+                        current = sc.nextLine();
+                        current = current.substring(19);
+                        courseName = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        multiplier = Double.parseDouble(current.substring(0,current.indexOf("$")));
+                        current = current.substring(current.indexOf("$")+1);
+                        startDate = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        endDate = current;
+                        temp = new Course(courseName,multiplier,startDate,endDate);
+                        courseWrapper.addCourse(temp);
+                    }
+
+                    if (current.contains(":Instance:")) {
+                        courseName = current.substring(10,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        name = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        day = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        date = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        startTime = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        endTime = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        startap = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        endap = current.substring(0,current.indexOf("$"));
+                        current = current.substring(current.indexOf("$")+1);
+                        type = current;
+                        temp.addInstance(new CourseInstance(courseName,name,day,date,startTime,endTime,startap,endap,type));
+                    }
+                    if(current.contains("END-OF-CLASS")) break;
+                }
+            }
+        } catch(java.io.FileNotFoundException sc) {
+        }
+
+        return courseWrapper;
+    }
+
+    public Vector<CourseInstance> getTodaysSchedule(String date) {
+        // given a date in the format mm/dd/yyyy, return a vector of all CourseInstances occuring on that day
+        Calendar calVal;
+        String dateStr;
+        Vector<CourseInstance> todaysSchedule = new Vector<CourseInstance>();
+        for(int i = 0; i < this.allInstances.size(); i++) {
+            calVal = this.allInstances.elementAt(i).startTime;
+            dateStr = CourseInstance.calDateToString(calVal);
+            if(dateStr.equals(date)) {
+                todaysSchedule.add(this.allInstances.elementAt(i));
+            }
+        }
+        return todaysSchedule;
+    }
+
+    public String stringTodaysSchedule(String date) {
+        // print classes first, then assignments
+        Vector<CourseInstance> instances = this.getTodaysSchedule(date);
+        String schedule = "";
+        CourseInstance currentInstance;
+        for(int i = 0; i < instances.size(); i++) {
+            currentInstance = instances.elementAt(i);
+            schedule = schedule + currentInstance.getInfo();
+            //schedule.concat(currentInstance.courseName + ":" + currentInstance.type +  )
+        }
+        return schedule;
+    }
+
+//    public static void main(String[] args) {
+//        Course EK307 = new Course("EK307", 2, "9/1/2018", "12/17/2018");
+//        Course.addInstances(EK307,"Monday", "Lecture", "10:10", "11:55", "AM", "AM");
+//        // add a hw
+//        CourseInstance hw1EK307 = new CourseInstance("EK307", "Wednesday", "12/5/2018", "Homework");
+//        EK307.addInstance(hw1EK307);
+//
+//        Course EC327 = new Course("EC327", 4, "9/1/2018", "12/17/2018");
+//        Course.addInstances(EC327, "Monday", "Lecture", "2:30", "4:15", "PM", "PM");
+//        CourseInstance hw1EC327 = new CourseInstance("EC327", "Monday", "12/10/2018", "Homework");
+//        EC327.addInstance(hw1EC327);
+//
+//        CourseWrapper cwrap = new CourseWrapper();
+//        cwrap.addCourse(EK307);
+//        cwrap.addCourse(EC327);
+//
+//        // Try printing
+//        cwrap.printCourses();
+//
+//
+//    }
 }
 

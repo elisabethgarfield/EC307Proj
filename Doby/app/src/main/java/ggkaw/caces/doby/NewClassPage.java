@@ -79,7 +79,7 @@ public class NewClassPage extends AppCompatActivity {
         String startTime =  startTimeText.getText().toString();
         String endTime =  endTimeText.getText().toString();
 
-        addInstances(createdCourse, classDay, classType, startTime,endTime,APStart,APEnd);
+        addInstances(createdCourse, classDay, classType, startTime,endTime, APStart, APEnd);
 
         Toast.makeText(this, "Lecture/Lab Added", 300);
 //        String
