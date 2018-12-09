@@ -75,6 +75,26 @@ public class CourseWrapper implements Serializable {
         }
     }
 
+    // for deleting entire courses and all instances
+    public void deleteCourse(String courseName) {
+        for(int i = 0; i < this.allCourses.size(); i++) {
+            if(this.allCourses.elementAt(i).name.equals(courseName)) {
+                // delete this course from the wrapper!!!
+                this.allCourses.remove(i);
+                break; // should only delete one course at a time
+            }
+        }
+        // also need to remove all course instances with the passed in coursename (go backward to avoid skips)
+        for(int i = this.allInstances.size(); i >= 0; i--) {
+            if(this.allInstances.elementAt(i).name.equals(courseName)) {
+                this.allInstances.remove(i);
+            }
+        }
+    }
+     // for deleting hws, exams, lab reports
+    public void deleteInstance(String instName) {
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String saveCourses(){

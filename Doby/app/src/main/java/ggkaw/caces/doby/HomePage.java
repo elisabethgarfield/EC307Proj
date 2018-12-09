@@ -106,7 +106,7 @@ public class HomePage extends AppCompatActivity {
         try {
             fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
             fos.write(saveText.getBytes());
-            Toast.makeText(this,"Saved!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,"Saved!", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
         } // /data/user/0/ggkaw.caces.doby/files/saved_data.txt
@@ -293,5 +293,20 @@ public class HomePage extends AppCompatActivity {
         d3.setText(nextDayStr);
         // put these in the GUI!
 
+    }
+
+    public void AddHWButtonPressed(View view) {
+        // go to add hw page
+        Intent AddHWIntent = new Intent(this, AddHomeworkTime.class);
+
+        startActivity(AddHWIntent);
+
+    }
+
+    public void DeleteButtonPressed(View view) {
+        // go to delete page
+        Intent DeleteIntent = new Intent(this, DeletePage.class);
+
+        startActivity(DeleteIntent);
     }
 }

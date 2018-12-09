@@ -38,6 +38,8 @@
     <string name="Add_Assign_Butt">Add Assignment</string>
     <string name="right_butt"><![CDATA[>]]></string>
     <string name="left_butt"><![CDATA[<]]></string>
+    <string name="delete_butt">Delete...</string>
+    <string name="addHW_butt">Add HW</string>
     <string-array name="Assignment_Types">
         <item>Assignment</item>
         <item>Exam</item>

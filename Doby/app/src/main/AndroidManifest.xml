@@ -32,6 +32,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ggkaw.caces.doby.HomePage" />
         </activity>
+        <activity
+            android:name=".DeletePage"
+            android:label="Delete Page"
+            android:parentActivityName=".HomePage">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ggkaw.caces.doby.HomePage" />
+        </activity>
+        <activity
+            android:name=".AddHomeworkTime"
+            android:label="Add Homework"
+            android:parentActivityName=".HomePage">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ggkaw.caces.doby.HomePage" />
+        </activity>
     </application>
 
 </manifest>
