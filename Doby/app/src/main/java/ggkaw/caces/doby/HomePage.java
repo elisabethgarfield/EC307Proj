@@ -279,7 +279,6 @@ public class HomePage extends AppCompatActivity {
         TextView d2 = (TextView) findViewById(R.id.Day_View_2);
         TextView d3 = (TextView) findViewById(R.id.Day_View_3);
 
-
         todaySched = cwrap.stringTodaysSchedule(today);
         tomorrowSched = cwrap.stringTodaysSchedule(tomorrow);
         nextDaySched = cwrap.stringTodaysSchedule(nextDay);
@@ -299,6 +298,18 @@ public class HomePage extends AppCompatActivity {
         // go to add hw page
         Intent AddHWIntent = new Intent(this, AddHomeworkTime.class);
 
+        AddHWIntent.putExtra("Course Wrapper", cwrap);
+
+        Vector<String> courseNames = new Vector<String>();
+
+        for(int i = 0; i < cwrap.allCourses.size(); i++) {
+            courseNames.add(cwrap.allCourses.elementAt(i).name);
+        }
+
+        String[] stringNames = courseNames.toArray(new String[courseNames.size()]);
+
+        AddHWIntent.putExtra("Course Names", stringNames);
+
         startActivity(AddHWIntent);
 
     }
@@ -306,6 +317,18 @@ public class HomePage extends AppCompatActivity {
     public void DeleteButtonPressed(View view) {
         // go to delete page
         Intent DeleteIntent = new Intent(this, DeletePage.class);
+
+        DeleteIntent.putExtra("Course Wrapper", cwrap);
+
+        Vector<String> courseNames = new Vector<String>();
+
+        for(int i = 0; i < cwrap.allCourses.size(); i++) {
+            courseNames.add(cwrap.allCourses.elementAt(i).name);
+        }
+
+        String[] stringNames = courseNames.toArray(new String[courseNames.size()]);
+
+        DeleteIntent.putExtra("Course Names", stringNames);
 
         startActivity(DeleteIntent);
     }
