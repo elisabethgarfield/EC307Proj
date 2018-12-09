@@ -1,6 +1,8 @@
 package ggkaw.caces.doby;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +12,11 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -41,33 +47,8 @@ public class AssignmentPage extends AppCompatActivity {
             }
         });
 
-
-
-
-
-//    CalendarView Cview = (CalendarView) findViewById(R.id.Calendar_View);
-//    Cview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-//        GregorianCalendar calendar;
-//        @Override
-//        public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-//            this.calendar = new GregorianCalendar( year, month, dayOfMonth );
-//        }
-//    });
-//
-//    Calendar c = Calendar.getInstance();
-//    c.setTimeInMillis(Cview.getDate());
-//
-//    String s = "THE DAY OF THE MONTH SELECTED IS ";
-//    s.concat(Integer.toString(c.get(Calendar.DAY_OF_MONTH));
-//
-//    Log.d("CALENDAR DAY", s);
-////    System.out.println(c.get(Calendar.DAY_OF_MONTH));
-
-
-
     }
 //
-
 
     public void LaunchAssignmentTask(View view) {
         // add new course to vector of new course instances
@@ -82,9 +63,11 @@ public class AssignmentPage extends AppCompatActivity {
         newInstances.add(new CourseInstance(sCourseName, sAssignmentName, selectedDate, sType));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void LaunchDoneTask(View view) {
         CourseWrapper cwrap = new CourseWrapper((CourseWrapper) getIntent().getSerializableExtra("Course Wrapper"));
         cwrap.addCourseInstances(newInstances);
+
 
         Intent sendNewWrapper = new Intent(this, HomePage.class);
         //CourseWrapper cwrap = (CourseWrapper) sendNewWrapper.getSerializableExtra("Course Wrapper");

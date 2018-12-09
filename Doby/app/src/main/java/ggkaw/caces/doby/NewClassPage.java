@@ -1,6 +1,8 @@
 package ggkaw.caces.doby;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,53 +11,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import static ggkaw.caces.doby.Course.addInstances;
 
 public class NewClassPage extends AppCompatActivity {
 
     // declare the instance of Course class you will use
     Course createdCourse;
-//    private static final String DEG_TAG = "Read DICK!";
-//
-//    private void writeToFile(String data, Context context) {
-//        try {
-//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
-//            outputStreamWriter.write(data);
-//            outputStreamWriter.close();
-//        }
-//        catch (IOException e) {
-//            Log.e("Exception", "File write failed: " + e.toString());
-//        }
-//    }
-//    private String readFromFile(Context context) {
-//
-//        String ret = "";
-//
-//        try {
-//            InputStream inputStream = context.openFileInput("config.txt");
-//
-//            if ( inputStream != null ) {
-//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//                String receiveString = "";
-//                StringBuilder stringBuilder = new StringBuilder();
-//
-//                while ( (receiveString = bufferedReader.readLine()) != null ) {
-//                    stringBuilder.append(receiveString);
-//                }
-//
-//                inputStream.close();
-//                ret = stringBuilder.toString();
-//            }
-//        }
-//        catch (FileNotFoundException e) {
-//            Log.e("login activity", "File not found: " + e.toString());
-//        } catch (IOException e) {
-//            Log.e("login activity", "Can not read file: " + e.toString());
-//        }
-//
-//        return ret;
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +87,7 @@ public class NewClassPage extends AppCompatActivity {
         createdCourse = new Course(scourseName, mult, sstartDate, sendDate); // CREATE NEW CONSTRUCTOR w/ 2 args
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void launchDoneTask(View view) {
         CourseWrapper cwrap = new CourseWrapper((CourseWrapper) getIntent().getSerializableExtra("Course Wrapper"));
         cwrap.addCourse(createdCourse);

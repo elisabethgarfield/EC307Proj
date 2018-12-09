@@ -1,9 +1,12 @@
 package ggkaw.caces.doby;
 
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -63,26 +66,22 @@ public class CourseWrapper implements Serializable {
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void saveCourses(){
+    public String saveCourses(){
         String text = "";
-        try(PrintWriter fos = new PrintWriter("save_test.txt");)
-        {
-            int i = 0;
+            int i;
             for(i = 0; i < this.allCourses.size(); i++) {
                 text = text.concat("####-" + i + "-####\n");
                 text = text.concat(allCourses.elementAt(i).returnCourseInfo(i));
                 text = text.concat("END-OF-CLASS\n");
             }
-            fos.print(":NumOfCourses:" + i + "\n" + text);
 
-        }catch(java.io.FileNotFoundException fos){
-            fos.printStackTrace();
-        }
+        return ":NumCourses:" + i + "\n" + text;
     }
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public CourseWrapper loadCourses(){
+    public static CourseWrapper loadCourses(){
 
         String courseName = "";
         double multiplier;
@@ -101,7 +100,7 @@ public class CourseWrapper implements Serializable {
         int numOfCourses;
         CourseWrapper courseWrapper = new CourseWrapper();
         Course temp = new Course();
-        File file = new File("save_test.txt");
+        File file = new File("C:\\Users\\sadie.la\\Documents\\fall2018\\EC327\\Robin\\EC307Proj\\Doby\\app\\src\\main\\java\\ggkaw\\caces\\doby\\save_test.txt");
         try(Scanner sc = new Scanner(file)) {
             current = sc.nextLine();
             numOfCourses = Integer.parseInt(current.substring(14));
@@ -147,6 +146,7 @@ public class CourseWrapper implements Serializable {
                 }
             }
         } catch(java.io.FileNotFoundException sc) {
+            return null;
         }
 
         return courseWrapper;
