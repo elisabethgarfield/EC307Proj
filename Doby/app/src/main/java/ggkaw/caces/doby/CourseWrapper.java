@@ -80,77 +80,77 @@ public class CourseWrapper implements Serializable {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static CourseWrapper loadCourses(){
-
-        String courseName = "";
-        double multiplier;
-        String startDate = "";
-        String endDate = "";
-        String name =  "";
-        String day = "";
-        String date = "";
-        String startTime = "";
-        String endTime = "";
-        String startap = "";
-        String endap = "";
-        String type = "";
-        String current = "";
-
-        int numOfCourses;
-        CourseWrapper courseWrapper = new CourseWrapper();
-        Course temp = new Course();
-        File file = new File("C:\\Users\\sadie.la\\Documents\\fall2018\\EC327\\Robin\\EC307Proj\\Doby\\app\\src\\main\\java\\ggkaw\\caces\\doby\\save_test.txt");
-        try(Scanner sc = new Scanner(file)) {
-            current = sc.nextLine();
-            numOfCourses = Integer.parseInt(current.substring(14));
-
-            for(int i = 0; i < numOfCourses; i++) {
-                while (sc.hasNextLine()) {
-                    current = sc.nextLine();
-                    if(current.contains("####-")){
-                        current = sc.nextLine();
-                        current = current.substring(19);
-                        courseName = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        multiplier = Double.parseDouble(current.substring(0,current.indexOf("$")));
-                        current = current.substring(current.indexOf("$")+1);
-                        startDate = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        endDate = current;
-                        temp = new Course(courseName,multiplier,startDate,endDate);
-                        courseWrapper.addCourse(temp);
-                    }
-
-                    if (current.contains(":Instance:")) {
-                        courseName = current.substring(10,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        name = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        day = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        date = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        startTime = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        endTime = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        startap = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        endap = current.substring(0,current.indexOf("$"));
-                        current = current.substring(current.indexOf("$")+1);
-                        type = current;
-                        temp.addInstance(new CourseInstance(courseName,name,day,date,startTime,endTime,startap,endap,type));
-                    }
-                    if(current.contains("END-OF-CLASS")) break;
-                }
-            }
-        } catch(java.io.FileNotFoundException sc) {
-            return null;
-        }
-
-        return courseWrapper;
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//    public static CourseWrapper loadCourses(){
+//
+//        String courseName = "";
+//        double multiplier;
+//        String startDate = "";
+//        String endDate = "";
+//        String name =  "";
+//        String day = "";
+//        String date = "";
+//        String startTime = "";
+//        String endTime = "";
+//        String startap = "";
+//        String endap = "";
+//        String type = "";
+//        String current = "";
+//
+//        int numOfCourses;
+//        CourseWrapper courseWrapper = new CourseWrapper();
+//        Course temp = new Course();
+//        File file = new File("C:\\Users\\sadie.la\\Documents\\fall2018\\EC327\\Robin\\EC307Proj\\Doby\\app\\src\\main\\java\\ggkaw\\caces\\doby\\save_test.txt");
+//        try(Scanner sc = new Scanner(file)) {
+//            current = sc.nextLine();
+//            numOfCourses = Integer.parseInt(current.substring(14));
+//
+//            for(int i = 0; i < numOfCourses; i++) {
+//                while (sc.hasNextLine()) {
+//                    current = sc.nextLine();
+//                    if(current.contains("####-")){
+//                        current = sc.nextLine();
+//                        current = current.substring(19);
+//                        courseName = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        multiplier = Double.parseDouble(current.substring(0,current.indexOf("$")));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        startDate = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        endDate = current;
+//                        temp = new Course(courseName,multiplier,startDate,endDate);
+//                        courseWrapper.addCourse(temp);
+//                    }
+//
+//                    if (current.contains(":Instance:")) {
+//                        courseName = current.substring(10,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        name = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        day = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        date = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        startTime = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        endTime = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        startap = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        endap = current.substring(0,current.indexOf("$"));
+//                        current = current.substring(current.indexOf("$")+1);
+//                        type = current;
+//                        temp.addInstance(new CourseInstance(courseName,name,day,date,startTime,endTime,startap,endap,type));
+//                    }
+//                    if(current.contains("END-OF-CLASS")) break;
+//                }
+//            }
+//        } catch(java.io.FileNotFoundException sc) {
+//            return null;
+//        }
+//
+//        return courseWrapper;
+//    }
 
     public Vector<CourseInstance> getTodaysSchedule(String date) {
         // given a date in the format mm/dd/yyyy, return a vector of all CourseInstances occuring on that day

@@ -10,14 +10,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Calendar;
+import java.util.Scanner;
 import java.util.Vector;
 
 public class HomePage extends AppCompatActivity {
-
+    private static final String FILE_NAME = "saved_data.txt";
     String today;
     String tomorrow;
     String nextDay;
@@ -43,7 +48,7 @@ public class HomePage extends AppCompatActivity {
         try {
             if(checkFlag == null) {
                 // this is where we will load from file if file exists
-                cwrap = CourseWrapper.loadCourses();
+                cwrap = load();
                 if(cwrap == null) {
                     cwrap = new CourseWrapper();
                 }
@@ -53,7 +58,9 @@ public class HomePage extends AppCompatActivity {
                 cwrap = (CourseWrapper)intent.getSerializableExtra("CourseWrap");
             }
         } catch (Throwable t) {
-
+            if(cwrap == null) {
+                cwrap = new CourseWrapper();
+            }
         }
 
         // populate 3-day schedule
@@ -86,23 +93,108 @@ public class HomePage extends AppCompatActivity {
         d3.setText(nextDayStr);
 
         // PUT THESE IN THE GUI TO!!
+        save(cwrap);
+
+    }// end of onCreate
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void save(CourseWrapper course) {
         String saveText = cwrap.saveCourses();
+        FileOutputStream fos = null;
 
         try {
-            String fileName = "C:\\Users\\sadie.la\\Documents\\fall2018\\EC327\\Robin\\EC307Proj\\Doby\\app\\src\\main\\java\\ggkaw\\caces\\doby\\save_test.txt";
-            FileOutputStream fileOS = openFileOutput(fileName, MODE_PRIVATE);
-            fileOS.write(saveText.getBytes());
-            fileOS.close();
-            Toast.makeText(getApplicationContext(), "Wrapper Saved", Toast.LENGTH_LONG).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+            fos.write(saveText.getBytes());
+            Toast.makeText(this,"Saved!", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }// end of onCreate
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public CourseWrapper load() {
+        String courseName = "";
+        double multiplier;
+        String startDate = "";
+        String endDate = "";
+        String name = "";
+        String day = "";
+        String date = "";
+        String startTime = "";
+        String endTime = "";
+        String startap = "";
+        String endap = "";
+        String type = "";
+        String current = "";
+        int numOfCourses = 0;
+        CourseWrapper courseWrapper = new CourseWrapper();
 
-    public void LaunchNewClassPage(View view) {
+        FileInputStream fis = null;
+        Course temp = new Course();
+
+        try {
+            fis = openFileInput(FILE_NAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String text;
+            int count = 0;
+            while ((text = br.readLine()) != null) {
+                if (count == 0) {
+                    numOfCourses = Integer.parseInt(text.substring(14));
+                }
+                for (int i = 0; i < numOfCourses; i++) {
+                    while ((text = br.readLine()) != null) {
+                        if (text.contains("####-")) {
+                            text = br.readLine();
+                            current = text;
+                            current = current.substring(19);
+                            courseName = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            multiplier = Double.parseDouble(current.substring(0, current.indexOf("$")));
+                            current = current.substring(current.indexOf("$") + 1);
+                            startDate = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            endDate = current;
+                            temp = new Course(courseName, multiplier, startDate, endDate);
+                            courseWrapper.addCourse(temp);
+                        }
+
+                        if (text.contains(":Instance:")) {
+                            current = text;
+                            courseName = current.substring(10, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            name = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            day = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            date = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            startTime = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            endTime = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            startap = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            endap = current.substring(0, current.indexOf("$"));
+                            current = current.substring(current.indexOf("$") + 1);
+                            type = current;
+                            temp.addInstance(new CourseInstance(courseName, name, day, date, startTime, endTime, startap, endap, type));
+                        }
+                        if (current.contains("END-OF-CLASS")) break;
+                    }
+                }
+            }
+        } catch(FileNotFoundException e){
+            e.printStackTrace();
+            return null;
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        return courseWrapper;
+    }
+
+                public void LaunchNewClassPage(View view) {
         Intent NewClassIntent = new Intent(this, NewClassPage.class);
 
         NewClassIntent.putExtra("Course Wrapper", cwrap); // Passing course class from this page to home page ...
