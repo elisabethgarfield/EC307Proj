@@ -1,10 +1,12 @@
 package ggkaw.caces.doby;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -34,6 +36,7 @@ public class NewClassPage extends AppCompatActivity {
         Spinner classDaySpin = (Spinner) findViewById(R.id.Day_Drop);
         Spinner AMPMStart = (Spinner) findViewById(R.id.AM_PM_Start_Spin);
         Spinner AMPMEnd = (Spinner) findViewById(R.id.AM_PM_End_Spin);
+        EditText className = (EditText) findViewById(R.id.Class_Name_Edit);
         EditText startTimeText = (EditText) findViewById(R.id.Start_Time_Edit);
         EditText endTimeText = (EditText) findViewById(R.id.End_Time_Edit);
 
@@ -46,28 +49,27 @@ public class NewClassPage extends AppCompatActivity {
 
         addInstances(createdCourse, classDay, classType, startTime,endTime, APStart, APEnd);
 
-        Toast.makeText(this, "Lecture/Lab Added", 300);
+        Toast.makeText(this, "Lecture/Lab Added", Toast.LENGTH_LONG);
 //        String
 
 
-//        Context context = this;
-//        writeToFile("Dick", context);
-//        Log.d(DEG_TAG,readFromFile(context));
 
         // create new course instance and add it to the Course class
-//        createdCourse.addInstance(CourseInstance());
+        //createdCourse.addInstance(CourseInstance());
 
 
-//        existingSections.append(classTypeSpin.getSelectedItem().toString());
-//        existingSections.append(" ");
-//        existingSections.append(classDaySpin.getSelectedItem().toString());
-//        existingSections.append(" ");
-//        existingSections.append(timeText.getText().toString());
-//        existingSections.append(AMPMStart.getSelectedItem().toString());
-//        existingSections.append(" to ");
-//        existingSections.append(durationText.getText().toString());
-//        existingSections.append(AMPMEnd.getSelectedItem().toString());
-//        existingSections.append("\n-------------\n");
+        existingSections.append(className.getText().toString());
+        existingSections.append(" ");
+        existingSections.append(classTypeSpin.getSelectedItem().toString());
+        existingSections.append(" ");
+        existingSections.append(classDaySpin.getSelectedItem().toString());
+        existingSections.append(" ");
+        existingSections.append(startTime);
+        existingSections.append(AMPMStart.getSelectedItem().toString());
+        existingSections.append(" to ");
+        existingSections.append(endTime);
+        existingSections.append(AMPMEnd.getSelectedItem().toString());
+        existingSections.append("\n-------------\n");
 
     }
 
