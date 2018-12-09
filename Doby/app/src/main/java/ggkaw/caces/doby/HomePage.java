@@ -81,7 +81,7 @@ public class HomePage extends AppCompatActivity {
 
         // get schedule for these days
         todaySched = cwrap.stringTodaysSchedule(today);
-        tomorrowSched = cwrap.stringTodaysSchedule(tomorrow);
+        tomorrowSched = cwrap.stringTodaysSchedule(tomorrow); // I THINK THE ERROR IS HERE
         nextDaySched = cwrap.stringTodaysSchedule(nextDay);
 
         String todayStr = today + "\n" + todaySched;
@@ -93,8 +93,9 @@ public class HomePage extends AppCompatActivity {
         d3.setText(nextDayStr);
 
         // PUT THESE IN THE GUI TO!!
-        save(cwrap);
-
+        if(cwrap.allCourses.size() != 0) {
+            save(cwrap);
+        }
     }// end of onCreate
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -108,7 +109,7 @@ public class HomePage extends AppCompatActivity {
             Toast.makeText(this,"Saved!", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } // /data/user/0/ggkaw.caces.doby/files/saved_data.txt
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -141,7 +142,8 @@ public class HomePage extends AppCompatActivity {
             int count = 0;
             while ((text = br.readLine()) != null) {
                 if (count == 0) {
-                    numOfCourses = Integer.parseInt(text.substring(14));
+                    numOfCourses = Integer.parseInt(text.substring(12));
+                    count++;
                 }
                 for (int i = 0; i < numOfCourses; i++) {
                     while ((text = br.readLine()) != null) {
@@ -191,10 +193,12 @@ public class HomePage extends AppCompatActivity {
         } catch(IOException e){
             e.printStackTrace();
         }
+        // load courseInstances into courseInstance array
+        courseWrapper.populateInstances();
         return courseWrapper;
     }
 
-                public void LaunchNewClassPage(View view) {
+    public void LaunchNewClassPage(View view) {
         Intent NewClassIntent = new Intent(this, NewClassPage.class);
 
         NewClassIntent.putExtra("Course Wrapper", cwrap); // Passing course class from this page to home page ...
