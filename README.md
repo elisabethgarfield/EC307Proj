@@ -1,2 +1,2 @@
-# EC307Proj
+# EC327Proj
 This is our child.
